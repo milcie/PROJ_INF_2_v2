@@ -41,6 +41,7 @@ class PROJ_INF_2_v2Dialog(QtWidgets.QDialog, FORM_CLASS):
         super(PROJ_INF_2_v2Dialog, self).__init__(parent)
         self.setupUi(self)
         self.pushButton_dh.clicked.connect(self.oblicz_dh)
+        self.pushButton_2.clicked.connect(self.oblicz_pole)
 
     def oblicz_dh(self):
         wybrana_wartstwa = self.mMapLayerComboBox.currentLayer()
