@@ -129,9 +129,9 @@ class PROJ_INF_2_v2Dialog(QtWidgets.QDialog, FORM_CLASS):
         for j in range(len(points_xy)):
             pole += points_xy[j][0] * (points_xy[(j + 1) % len(points_xy)][1] - points_xy[(j - 1) % len(points_xy)][1])
         pole = 0.5 * abs(pole)
-        pole_koncowe = round(pole, 5)
+        pole = round(pole, 5)
         
-        self.wynik_pole.setText(f'{pole_koncowe} m^2')
+        self.wynik_pole.setText(f'{pole} m^2')
         
-        QgsMessageLog.logMessage(f'Pole powierzchni wynosi: {pole_koncowe} m^2', level=Qgis.Success)
+        QgsMessageLog.logMessage(f'Pole powierzchni wynosi: {pole} m^2', level=Qgis.Success)
         iface.messageBar().pushMessage("Pole powierzchni", 'Obliczono pole powierzchni', level=Qgis.Success)
