@@ -107,7 +107,7 @@ class PROJ_INF_2_v2Dialog(QtWidgets.QDialog, FORM_CLASS):
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Warning)
             msg.setText('Błędna liczba punktów')
-            msg.setInformativeText("Należy wybrać trzy punkty do poprawności obliczeń")
+            msg.setInformativeText("Należy wybrać co najmniej trzy punkty do poprawności obliczeń")
             msg.setWindowTitle("Niepoprawnie wprowadzone dane")
             msg.exec_()
             return
