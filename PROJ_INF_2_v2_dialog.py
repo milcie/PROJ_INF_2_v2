@@ -89,7 +89,7 @@ class PROJ_INF_2_v2Dialog(QtWidgets.QDialog, FORM_CLASS):
             'Przewyższenie', 'Obliczono wysokość pomiędzy punktami', level=Qgis.Success)
 
     def oblicz_pole(self):
-        wybierz_wartstwe = self.mMapLayerComboBox.currentLayer()
+        wybierz_wartstwe = self.mMapLayerComboBox_2.currentLayer()
         
         # if wybrana_wartstwa is None:
         #     msg = QMessageBox()
