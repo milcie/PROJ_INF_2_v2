@@ -3,13 +3,14 @@
 Program umożliwia działanie wtyczki w programie QGIS i przeprowadzania działań, takich jak obliczenie równicy wysokości między dwoma punktami oraz obliczenie pola powierzchni.:
 
 WYMAGANIA:
+- Python 3.9
+- Biblioteki: math, PyQt5
+- QGIS 3.36.0
+- system Windows
 
-    Python 3.9
-    Biblioteki: math, PyQt5
-    QGIS 3.36.0
-    system Windows
 
-INSTRUKCJA OBSŁUGI:
+__INSTRUKCJA OBSŁUGI:__
+
 Program umożliwia przeprowadzenie wyżej wymienionych operacji w określonej wersji programu QGIS. Po pobraniu plików należy przeładować wtyczkę PROJ_INF_2_v2 w programie.
 
 W przypadku obliczenia przewyższeń:
