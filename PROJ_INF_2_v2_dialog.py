@@ -26,6 +26,10 @@ import os
 
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
+from qgis.core import QgsMessageLog, Qgis, QgsProject, QgsPointXY
+from qgis.utils import iface
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QDialog, QApplication, QMessageBox
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
@@ -42,3 +46,55 @@ class PROJ_INF_2_v2Dialog(QtWidgets.QDialog, FORM_CLASS):
         # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
+        self.pushButton_dh.clicked.connect(self.oblicz_dh)
+
+    def oblicz_dh(self):
+        # wybrana_wartstwa = self.mMapLayerComboBox_dh.activeLayer()
+        wybrana_wartstwa = self.mMapLayerComboBox.currentLayer()
+        
+        if wybrana_wartstwa is None:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText('Nie wybrano warstwy, z której należy pobrać punkty')
+            msg.setInformativeText("Wybranie warstyw jest wymagane do obliczeń")
+            msg.setWindowTitle("Brak wyboru danych")
+            msg.exec_()
+            return
+        
+        features = wybrana_wartstwa.selectedFeatures()
+        
+        if len(features) != 2:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText('Błędna liczba punktów')
+            msg.setInformativeText("Nalezy wybrac tylko dwa punkty do poprawnosći obliczeń")
+            msg.setWindowTitle("Niepoprawnie wprowadzone dane")
+            msg.exec_()
+            return
+        
+        try:
+            h_1 = float(features[0]['wysokosc'])
+            h_2 = float(features[2]['wysokosc'])
+            d_h = h_2 - h_1
+            dh = round(d_h, 5)
+            
+        except (ValueError, KeyError) as e:
+            QgsMessageLog.logMessage(
+                f'Błąd podczas odczytu wartości "wysokoc" lub konwersji na float: {e}', level=Qgis.Critical)
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setText('Błąd danych')
+            msg.setInformativeText(
+                "Problem z odczytem odpowiedniego atrybutu.")
+            msg.setWindowTitle("Brak danych")
+            msg.exec_()
+            return
+        
+            self.wynik.setText(f'{dh} m')
+            
+            QgsMessageLog.logMessage(
+                f'Przwyższenie między wybranymi punktami = {dh} m', level=Qgis.Success)
+            iface.messageBar().pushMessage(
+                'Przewyższenie', 'Obliczono wysokość pomiędzy punktami', level=Qgis.Success)
+
+
