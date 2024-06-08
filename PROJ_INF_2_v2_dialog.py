@@ -67,20 +67,20 @@ class PROJ_INF_2_v2Dialog(QtWidgets.QDialog, FORM_CLASS):
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Warning)
             msg.setText('Błędna liczba punktów')
-            msg.setInformativeText("Nalezy wybrac tylko dwa punkty do poprawnosći obliczeń")
+            msg.setInformativeText("Nalezy wybrać tylko dwa punkty do poprawnosći obliczeń")
             msg.setWindowTitle("Niepoprawnie wprowadzone dane")
             msg.exec_()
             return
         
-        try:
+        else:
             h_1 = float(features[0]['wysokosc'])
             h_2 = float(features[2]['wysokosc'])
             d_h = h_2 - h_1
             dh = round(d_h, 5)
             
-        except (ValueError, KeyError) as e:
+        if (ValueError, KeyError):
             QgsMessageLog.logMessage(
-                f'Błąd podczas odczytu wartości "wysokoc" lub konwersji na float: {e}', level=Qgis.Critical)
+                f'Błąd podczas odczytu wartości "wysokoc" lub konwersji na float: {(ValueError, KeyError)}', level=Qgis.Critical)
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)
             msg.setText('Błąd danych')
@@ -97,4 +97,64 @@ class PROJ_INF_2_v2Dialog(QtWidgets.QDialog, FORM_CLASS):
             iface.messageBar().pushMessage(
                 'Przewyższenie', 'Obliczono wysokość pomiędzy punktami', level=Qgis.Success)
 
+    def oblicz_pole(self):
+        wybrana_wartstwa = self.mMapLayerComboBox.currentLayer()
+        
+        if wybrana_wartstwa is None:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText('Nie wybrano warstwy, z której należy pobrać punkty')
+            msg.setInformativeText("Wybranie warstyw jest wymagane do obliczeń")
+            msg.setWindowTitle("Brak wyboru danych")
+            msg.exec_()
+            return
+            
+        features_pole = wybrana_wartstwa.selectedFeatures()
+        
+        if len(features_pole) < 3:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText('Błędna liczba punktów')
+            msg.setInformativeText("Nalezy wybrać trzy punkty do poprawnosći obliczeń")
+            msg.setWindowTitle("Niepoprawnie wprowadzone dane")
+            msg.exec_()
+            return
+        
+        coords_x = []
+        coords_y = []
+        
+        for point in features_pole:
+            geo = point.geometry()
+            x = float(geo.asPoint().x())
+            y = float(geo.asPoint().y())
+            coords_x.append(x)
+            coords_y.append(y)
+        
+        points_xy = []
+        for i in range(len(coords_x)):
+            points_xy.append([coords_x[i], coords_y[i]])
+        
+        pole = 0.0
+        for i in range(len(points_xy)):
+            pole += points_xy[i][0] * (points_xy[(i + 1) % len(points_xy)][1] - points_xy[(i - 1) % len(points_xy)][1])
+        pole_1 = 0.5 * abs(pole)
+        pole_koncowe = round(pole_1, 5)
+        
+        # if (ValueError, KeyError):
+        #     QgsMessageLog.logMessage(
+        #         f'Błąd podczas odczytu wartości "wysokoc" lub konwersji na float: {(ValueError, KeyError)}', level=Qgis.Critical)
+        #     msg = QMessageBox()
+        #     msg.setIcon(QMessageBox.Critical)
+        #     msg.setText('Błąd danych')
+        #     msg.setInformativeText(
+        #         "Problem z odczytem odpowiedniego atrybutu.")
+        #     msg.setWindowTitle("Brak danych")
+        #     msg.exec_()
+        #     return
+        
+        self.label_area_result.setText(f'{pole_koncowe} m^2')
+        
+        QgsMessageLog.logMessage(f'Pole powierzchni wynosi: {pole_koncowe} m^2', level=Qgis.Success)
+        iface.messageBar().pushMessage("Pole powierzchni", 'Obliczono pole powierzchni', level=Qgis.Success)
+        
 
