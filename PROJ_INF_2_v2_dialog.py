@@ -128,8 +128,8 @@ class PROJ_INF_2_v2Dialog(QtWidgets.QDialog, FORM_CLASS):
         pole = 0.0
         for j in range(len(points_xy)):
             pole += points_xy[j][0] * (points_xy[(j + 1) % len(points_xy)][1] - points_xy[(j - 1) % len(points_xy)][1])
-        pole_1 = 0.5 * abs(pole)
-        pole_koncowe = round(pole_1, 5)
+        pole = 0.5 * abs(pole)
+        pole_koncowe = round(pole, 5)
         
         self.wynik_pole.setText(f'{pole_koncowe} m^2')
         
