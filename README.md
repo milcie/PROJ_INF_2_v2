@@ -20,6 +20,8 @@ W przypadku obliczenia przewyższeń:
 4. Kliknąć przycisk oblicz.
 5. Przewyższenie wyświetli się w zaokrągleniu do stu tysięcznych metra.
 
+W przypadku zaznaczenia innej liczby punktów niż dwa lub jeśli wybrana warstwa nie posiada atrybutu 'wysokosc' program pokażę błąd oraz jego przyczynę.
+
 
 W przypadku obliczenia pól powierzchni:
 1. Najpierw zaznaczyć conajmniej trzy punkty, których współrzędne są określone w metrach.
@@ -28,4 +30,5 @@ W przypadku obliczenia pól powierzchni:
 4. Kliknąć przycisk oblicz.
 5. Pole wyświetli się w zaokrągleniu do stu tysięcznych metrów kwadratowch.
 
+W przypadku zaznaczenia mniejszej ilosci punktów (wymagane minimum 3) program pokażę błąd oraz jego przyczynę.
    
